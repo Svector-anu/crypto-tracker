@@ -1,17 +1,33 @@
-import { useState, useEffect } from "react";
-import axios from "axios";
+import React from "react";
+import "./App.css";
+import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
+import { Header } from "./components";
+import Home from "./pages/Home";
+import Coin from "./pages/Coin";
+import { makeStyles } from "@material-ui/core";
 
 function App() {
-  const [data, setData] = useState(null);
-  useEffect(() => {
-    axios
-      .get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=10&page=1&sparkline=false",
-        { crossDomain: true }
-      )
-      .then((res) => console.log(res));
-  });
-  return <div className="App">{data && data.map((d) => <pre>{d}</pre>)}</div>;
+  const classes = useStyles();
+
+  return (
+    <Router>
+      <div className={classes.App}>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/coins/:id" element={<Coin />} />
+        </Routes>
+      </div>
+    </Router>
+  );
 }
 
 export default App;
+
+const useStyles = makeStyles({
+  App: {
+    minHeight: "100vh",
+    backgroundColor: "#14161a",
+    color: "#fff",
+  },
+});
