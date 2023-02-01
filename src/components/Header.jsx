@@ -49,7 +49,7 @@ const Header = () => {
   console.log(currency);
   return (
     <ThemeProvider theme={darkTheme}>
-      <AppBar color="transparent" position="sticky">
+      <AppBar style={{ backgroundColor: "#1a1919" }} position="sticky">
         <Container>
           <Toolbar>
             <Typography

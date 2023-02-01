@@ -12,3 +12,6 @@ export const TrendingCoins = (currency) =>
 
 // historical data of any timeframe
 // https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency={target_currency}&from={timestamp_start}&to={timestamp_end}
+
+//contract address of any coin
+//https://api.coingecko.com/api/v3/coins/{id}
