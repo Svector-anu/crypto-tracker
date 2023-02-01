@@ -72,7 +72,7 @@ const CoinListTable = () => {
 
         <TableContainer style={{ marginTop: 18 }}>
           {loading ? (
-            <LinearProgress style={{ backgroundColor: "black" }} />
+            <LinearProgress style={{ backgroundColor: "gold" }} />
           ) : (
             <Table>
               <TableHead>
