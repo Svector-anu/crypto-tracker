@@ -1,7 +1,7 @@
 import { LinearProgress, makeStyles, Typography } from "@material-ui/core";
 import ReactHtmlParser from "react-html-parser";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { useParams } from "react-router-dom";
 import { SingleCoin } from "../config/api";
 import { CryptoState } from "../CryptoContext";
@@ -45,11 +45,28 @@ const useStyles = makeStyles((theme) => ({
     width: "50%",
     margin: "40px auto",
   },
+  marketData: {
+    alignSelf: "start",
+    padding: 25,
+    paddingTop: 10,
+    width: "100%",
+    [theme.breakpoints.down("md")]: {
+      display: "flex",
+      justifyContent: "space-around",
+    },
+    [theme.breakpoints.down("sm")]: {
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    [theme.breakpoints.down("xs")]: {
+      alignItems: "start",
+    },
+  },
 }));
 
 const Coin = () => {
   const { id } = useParams();
-  const { currency } = CryptoState();
+  const { currency, symbol } = CryptoState();
   const [coin, setCoin] = useState([]);
   const [loading, setLoading] = useState(false);
 
@@ -61,11 +78,11 @@ const Coin = () => {
     setLoading(false);
   };
 
-  useEffect(() => {
+  const data = useMemo(() => {
     fetchData();
   }, [id]);
 
-  console.log("currency", currency);
+  // console.log("currency", currency);
 
   const classes = useStyles();
 
@@ -91,12 +108,12 @@ const Coin = () => {
 
             <div className={classes.marketData}>
               <span style={{ display: "flex" }}>
-                <Typography variant="h5" className={classes.heading}>
+                <Typography variant="h6" className={classes.heading}>
                   Rank:
                 </Typography>
                 &nbsp; &nbsp;
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   style={{
                     fontFamily: "Montserrat",
                   }}
@@ -106,34 +123,38 @@ const Coin = () => {
               </span>
 
               <span style={{ display: "flex" }}>
-                <Typography variant="h5" className={classes.heading}>
+                <Typography variant="h6" className={classes.heading}>
                   Current Price:
                 </Typography>
                 &nbsp; &nbsp;
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   style={{
                     fontFamily: "Montserrat",
                   }}
                 >
+                  {symbol}
                   {numberWithCommas(
                     coin?.market_data?.current_price[currency.toLowerCase()]
                   )}
                 </Typography>
               </span>
               <span style={{ display: "flex" }}>
-                <Typography variant="h5" className={classes.heading}>
+                <Typography variant="h6" className={classes.heading}>
                   Market Cap:
                 </Typography>
                 &nbsp; &nbsp;
                 <Typography
-                  variant="h5"
+                  variant="h6"
                   style={{
                     fontFamily: "Montserrat",
                   }}
                 >
+                  {symbol}
                   {numberWithCommas(
                     coin?.market_data?.market_cap[currency.toLowerCase()]
+                      .toString()
+                      .slice(0, -6)
                   )}
                   M
                 </Typography>
