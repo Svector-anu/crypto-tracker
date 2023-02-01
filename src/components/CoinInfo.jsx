@@ -41,7 +41,7 @@ const CoinInfo = ({ coin }) => {
   const fetchData = async () => {
     setLoading(true);
     const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-    setHistorycalData(data.prices);
+    setHistorycalData(data.total_volumes);
     setLoading(false);
   };
 
@@ -83,7 +83,7 @@ const CoinInfo = ({ coin }) => {
                 datasets: [
                   {
                     data: historycalData.map((coin) => coin[1]),
-                    label: `Price ( Past ${days} Days ) in ${currency}`,
+                    label: `Volume ( Past ${days} Days )`,
                     borderColor: "#EEBC1D",
                   },
                 ],

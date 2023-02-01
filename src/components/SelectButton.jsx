@@ -9,9 +9,7 @@ const useStyles = makeStyles({
     paddingRight: 20,
     fontFamily: "Montserrat",
     cursor: "pointer",
-    // backgroundColor: selected ? "gold" : "",
-    // color: selected ? "black" : "",
-    // fontWeight: selected ? 700 : 500,
+
     "&:hover": {
       backgroundColor: "gold",
       color: "black",
@@ -22,9 +20,18 @@ const useStyles = makeStyles({
 });
 const SelectButton = ({ children, selected, onClick }) => {
   const classes = useStyles();
+  console.log(classes);
 
   return (
-    <span onClick={onClick} className={classes.selectbutton}>
+    <span
+      onClick={onClick}
+      className={classes.selectbutton}
+      style={{
+        backgroundColor: selected ? "gold" : "",
+        color: selected ? "black" : "",
+        fontWeight: selected ? 700 : 500,
+      }}
+    >
       {children}
     </span>
   );
