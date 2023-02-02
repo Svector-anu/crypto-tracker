@@ -112,36 +112,38 @@ const Coin = () => {
       return volume_date.isBetween(start_date30, end_date30);
     });
 
-    if (data24.length !== 0) {
-      setPrev24(numberWithCommas(data24[0][1]).toString().slice(0, -8));
+    if (data24.length && data24.length !== 0) {
+      setPrev24(numberWithCommas(data24[0][1]).toString().split(".")[0]);
       // console.log("last", data24[0][1]);
       setCurrent24(
         numberWithCommas(data24[data24.length - 1][1])
           .toString()
-          .slice(0, -8)
+          .split(".")[0]
       );
+      console.log(prev24, current24);
     }
     if (data7.length !== 0) {
-      setPrev7(numberWithCommas(data7[0][1]).toString().slice(0, -8));
+      setPrev7(numberWithCommas(data7[0][1]).toString().split(".")[0]);
       setCurrent7(
         numberWithCommas(data7[data7.length - 1][1])
           .toString()
-          .slice(0, -8)
+          .split(".")[0]
       );
     }
     if (data30.length !== 0) {
-      setPrev30(numberWithCommas(data30[0][1]).toString().slice(0, -8));
+      console.log(data30[data30.length - 1][1], data30[0][1]);
+      setPrev30(numberWithCommas(data30[0][1]).toString().split(".")[0]);
       setCurrent30(
         numberWithCommas(data30[data30.length - 1][1])
           .toString()
-          .slice(0, -8)
+          .split(".")[0]
       );
     }
 
     // return data24;
   }, [apiData]);
 
-  // console.log("api Data", current7, current24, current30);
+  // console.log(data24[data24.length - 1][1], data24[0][0]);
 
   const calculateChangePercentage = (current, prev) => {
     // const result = ((current - prev) / prev) * 100;
