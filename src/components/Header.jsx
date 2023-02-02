@@ -46,7 +46,6 @@ const Header = () => {
     setCurrency(e.target.value);
   };
 
-  console.log(currency);
   return (
     <ThemeProvider theme={darkTheme}>
       <AppBar style={{ backgroundColor: "#1a1919" }} position="sticky">

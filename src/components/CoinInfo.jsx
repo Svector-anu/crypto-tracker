@@ -3,15 +3,22 @@ import {
   ThemeProvider,
   CircularProgress,
   makeStyles,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
 import axios from "axios";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import { HistoricalChart } from "../config/api";
 import { CryptoState } from "../CryptoContext";
 import { Line } from "react-chartjs-2";
 import Chart from "chart.js/auto";
 import { chartDays } from "../config/data";
 import { SelectButton } from "./index";
+import dayjs from "dayjs";
+import isBetween from "dayjs/plugin/isBetween";
+dayjs.extend(isBetween);
 
 const useStyles = makeStyles((theme) => ({
   container: {
@@ -29,25 +36,50 @@ const useStyles = makeStyles((theme) => ({
       paddingTop: 0,
     },
   },
+  formControl: {
+    margin: 3,
+    minWidth: 120,
+  },
 }));
 
 const CoinInfo = ({ coin }) => {
   const [historycalData, setHistorycalData] = useState([]);
   const [loading, setLoading] = useState(false);
+  const [parameter, setParameter] = useState("total_volumes");
   const [days, setDays] = useState(1);
-  const { currency } = CryptoState();
+  const { currency, setPercent7, setPercent24, setPercent30, setApiData } =
+    CryptoState();
   const classes = useStyles();
 
   const fetchData = async () => {
     setLoading(true);
-    const { data } = await axios.get(HistoricalChart(coin.id, days, currency));
-    setHistorycalData(data.total_volumes);
+    const { data } = await axios.get(HistoricalChart(coin.id, currency));
+    setApiData(data["total_volumes"]);
+    setHistorycalData(data[parameter]);
     setLoading(false);
   };
 
+  const handleParameterChange = (e) => {
+    setParameter(e.target.value);
+  };
+
+  const lastDay = useMemo(() => {
+    const start_date = dayjs().subtract(days, "days");
+    const end_date = start_date.add(days, "days");
+    // console.log(start_date, end_date);
+
+    const data = historycalData.filter(([date, value]) => {
+      const volume_date = dayjs(date);
+      return volume_date.isBetween(start_date, end_date);
+    });
+
+    // data.forEach(([date]) => console.log(dayjs(date).format()));
+    return data;
+  }, [historycalData]);
+
   useEffect(() => {
     fetchData();
-  }, [currency, days]);
+  }, [currency, days, parameter]);
 
   const darkTheme = createTheme({
     palette: {
@@ -71,7 +103,7 @@ const CoinInfo = ({ coin }) => {
           <>
             <Line
               data={{
-                labels: historycalData.map((coin) => {
+                labels: lastDay.map((coin) => {
                   let date = new Date(coin[0]);
                   let time =
                     date.getHours() > 12
@@ -82,7 +114,7 @@ const CoinInfo = ({ coin }) => {
 
                 datasets: [
                   {
-                    data: historycalData.map((coin) => coin[1]),
+                    data: lastDay.map((coin) => coin[1]),
                     label: `Volume ( Past ${days} Days )`,
                     borderColor: "#EEBC1D",
                   },
@@ -96,6 +128,7 @@ const CoinInfo = ({ coin }) => {
                 },
               }}
             />
+
             <div
               style={{
                 display: "flex",
@@ -104,6 +137,20 @@ const CoinInfo = ({ coin }) => {
                 width: "100%",
               }}
             >
+              <FormControl variant="outlined" className={classes.formControl}>
+                <InputLabel id="by">By</InputLabel>
+                <Select
+                  labelId="by"
+                  id="by"
+                  value={parameter}
+                  onChange={handleParameterChange}
+                  label="By"
+                >
+                  <MenuItem value={"prices"}>Price</MenuItem>
+                  <MenuItem value={"total_volumes"}>Volume</MenuItem>
+                </Select>
+              </FormControl>
+
               {chartDays.map((day) => (
                 <SelectButton
                   key={day.value}

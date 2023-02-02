@@ -4,17 +4,11 @@ export const CoinList = (currency) =>
 export const SingleCoin = (id) =>
   `https://api.coingecko.com/api/v3/coins/${id}`;
 
-export const HistoricalChart = (id, days = 365, currency) =>
+export const HistoricalChart = (id, currency, days = 60) =>
   `https://api.coingecko.com/api/v3/coins/${id}/market_chart?vs_currency=${currency}&days=${days}`;
 
 export const TrendingCoins = (currency) =>
   `https://api.coingecko.com/api/v3/coins/markets?vs_currency=${currency}&order=gecko_desc&per_page=10&page=1&sparkline=false&price_change_percentage=24h`;
-// const value = '24hour';
-// if (value == '24hour') {
-
-// } else if (value == '7day') {
-
-// }
 
 // historical data of any timeframe
 // https://api.coingecko.com/api/v3/coins/{id}/market_chart?vs_currency={target_currency}&from={timestamp_start}&to={timestamp_end}

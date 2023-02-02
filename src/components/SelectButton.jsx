@@ -20,7 +20,7 @@ const useStyles = makeStyles({
 });
 const SelectButton = ({ children, selected, onClick }) => {
   const classes = useStyles();
-  console.log(classes);
+  // console.log(classes);
 
   return (
     <span
