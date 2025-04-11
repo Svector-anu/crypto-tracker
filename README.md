@@ -1,2 +1,1 @@
-This is the repo for a cypto tracker
-THIS README will guide you on how to use
+i will give a guide on how to use this trcaker in two days
